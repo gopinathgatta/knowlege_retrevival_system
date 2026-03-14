@@ -1,0 +1,7 @@
+flask
+kafka-python
+sentence-transformers
+chromadb
+pysqlite3-binary
+openai==0.28.0
+posthog<3.0.0

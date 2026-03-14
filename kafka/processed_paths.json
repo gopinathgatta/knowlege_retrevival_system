@@ -1,0 +1,20 @@
+[
+  "hdfs://localhost:9000/rag/uploads/repos/MISP",
+  "hdfs://localhost:9000/rag/uploads/repos/mosquitto/mosquitto",
+  "hdfs://localhost:9000/rag/uploads/repos/azure-iot-predictive-maintenance/azure-iot-predictive-maintenance",
+  "hdfs://localhost:9000/rag/uploads/repos/kubernetes",
+  "hdfs://localhost:9000/rag/uploads/repos/hawkbit",
+  "hdfs://localhost:9000/rag/uploads/files/sd1f1.pdf",
+  "hdfs://localhost:9000/rag/uploads/repos/libmodbus/libmodbus",
+  "hdfs://localhost:9000/rag/uploads/repos/fastapi",
+  "hdfs://localhost:9000/rag/uploads/repos/libmodbus",
+  "hdfs://localhost:9000/rag/uploads/repos/azure-iot-predictive-maintenance",
+  "hdfs://localhost:9000/rag/uploads/repos/open62541",
+  "hdfs://localhost:9000/rag/uploads/repos/OpenPLC_v3",
+  "hdfs://localhost:9000/rag/uploads/repos/thingsboard",
+  "hdfs://localhost:9000/rag/uploads/repos/linux",
+  "hdfs://localhost:9000/rag/uploads/repos/wazuh",
+  "hdfs://localhost:9000/rag/uploads/repos/emqx",
+  "hdfs://localhost:9000/rag/uploads/repos/ditto",
+  "hdfs://localhost:9000/rag/uploads/repos/pymodbus/pymodbus"
+]

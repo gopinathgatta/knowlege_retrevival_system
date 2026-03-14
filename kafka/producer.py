@@ -5,58 +5,62 @@ import time
 # ================= KAFKA PRODUCER =================
 producer = KafkaProducer(
     bootstrap_servers="localhost:9092",
-    value_serializer=lambda v: json.dumps(v).encode("utf-8")
+    value_serializer=lambda v: json.dumps(v).encode("utf-8"),
+    retries=3,
+    linger_ms=10
 )
 
-TOPIC_NAME = "upload-events"
+# 🔴 MUST MATCH CONSUMER TOPIC
+TOPIC_NAME = "rag-upload-events"
 
 
 # ================= PRODUCER HELPERS =================
 def send_file_upload_event(hdfs_file_path):
-    """
-    Sends file upload event to Kafka
-    Matches consumer.py: event["type"] == "file"
-    """
     event = {
         "type": "file",
+        "source": "upload",
         "hdfs_path": hdfs_file_path
     }
 
-    producer.send(TOPIC_NAME, event)
-    producer.flush()
+    try:
+        meta = producer.send(TOPIC_NAME, event).get(timeout=10)
+        producer.flush()
+        print("📤 Sent FILE event:", event)
+        print(f"✅ Delivered to {meta.topic}:{meta.partition}")
+    except Exception as e:
+        print("❌ FILE event failed:", e)
 
-    print("📤 Sent FILE upload event:", event)
 
-
-def send_repo_upload_event(hdfs_repo_path):
-    """
-    Sends repo upload event to Kafka
-    Matches consumer.py: event["type"] == "repo"
-    """
+def send_repo_upload_event(hdfs_repo_path, repo_name=None):
     event = {
-        "type": "repo",
+        "type": "file",
+        "source": "git",
         "hdfs_path": hdfs_repo_path
     }
 
-    producer.send(TOPIC_NAME, event)
-    producer.flush()
+    if repo_name:
+        event["repo_name"] = repo_name
 
-    print("📤 Sent REPO upload event:", event)
+    try:
+        meta = producer.send(TOPIC_NAME, event).get(timeout=10)
+        producer.flush()
+        print("📤 Sent REPO event:", event)
+        print(f"✅ Delivered to {meta.topic}:{meta.partition}")
+    except Exception as e:
+        print("❌ REPO event failed:", e)
 
 
 # ================= TEST DRIVER =================
 if __name__ == "__main__":
+    print("⚠️ Test producer running (NOT UI driven)")
 
-    # 🔹 Example 1: File upload event
-    send_file_upload_event(
-        "/rag/uploads/sample.pdf"
-    )
-
-    time.sleep(2)
-
-    # 🔹 Example 2: Repo upload event
+    # 🔥 ACTUAL EVENT (SYSTEM AWAKENS HERE)
     send_repo_upload_event(
-        "/rag/uploads/repos/flask"
+        "/rag/uploads/repos/zephyr",
+        "zephyr"
     )
 
-    print("✅ Events sent successfully")
+    # Optional file test
+    # send_file_upload_event("/rag/uploads/sample.txt")
+
+    print("✅ Test producer finished")
